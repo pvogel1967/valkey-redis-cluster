@@ -2,4 +2,5 @@ bind ${BIND_ADDRESS}
 port ${PORT}
 appendonly yes
 dir /valkey-data/${PORT}
+loadmodule /usr/lib/valkey/libvalkey_bloom.so
 protected-mode no

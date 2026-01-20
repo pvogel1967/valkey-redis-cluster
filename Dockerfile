@@ -1,5 +1,5 @@
 # Build based on valkey:7.2.5 from "2024-05-22T23:17:59Z"
-FROM valkey/valkey:8.0.3-bookworm
+FROM valkey/valkey:8.1.5-bookworm
 
 LABEL maintainer="Peter Vogel <vogel.peter@gmail.com>"
 RUN apt-get update -qq && \

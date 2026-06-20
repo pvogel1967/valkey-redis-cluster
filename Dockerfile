@@ -1,10 +1,19 @@
 FROM valkey/valkey-bundle:9.1.0
 
 LABEL maintainer="Peter Vogel <vogel.peter@gmail.com>"
+# Only two runtime deps are actually used by docker-entrypoint.sh:
+#   - gettext-base -> envsubst (renders the .tmpl config files)
+#   - supervisor   -> supervisord (runs the valkey-server processes)
+# ruby/rubygems were only for the legacy valkey-trib.rb cluster builder
+# (valkey < 5.0); 9.x uses "valkey-cli --cluster create". The build toolchain
+# (gcc/make/build-essential/tcl/...) is unneeded because valkey-bundle ships
+# prebuilt binaries + modules. NOTE: "rubygems" is not a Debian package, which
+# is what made "apt-get install" fail with exit code 100.
 RUN apt-get update -qq && \
     apt-get install --no-install-recommends -yqq \
-      net-tools supervisor ruby rubygems locales gettext-base wget gcc make g++ build-essential libc6-dev tcl && \
-    apt-get clean -yqq
+      supervisor gettext-base && \
+    apt-get clean -yqq && \
+    rm -rf /var/lib/apt/lists/*
 
 RUN mkdir /valkey-conf && mkdir /valkey-data
 
